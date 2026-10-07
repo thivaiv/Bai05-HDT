@@ -1,1 +1,1 @@
-﻿using System; namespace Bai05 { public interface INetworkable { } }
+﻿namespace Bai05 { public interface INetworkable { } }

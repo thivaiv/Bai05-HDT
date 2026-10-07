@@ -1,1 +1,1 @@
-﻿using System; namespace Bai05 { public class LabRoom { } }
+﻿namespace Bai05 { public class LabRoom { } }
