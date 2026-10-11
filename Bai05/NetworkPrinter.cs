@@ -19,6 +19,9 @@ namespace Bai05
             IpAddress = null;
         }
 
+
+
+
         //kết nối mạng
         public void Connect(string ip)
         {
