@@ -12,53 +12,59 @@ namespace Bai05
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            Console.WriteLine("=== TEST THỬ CÁC LỚP THIẾT BỊ VÀ TÍNH PHÍ BẢO TRÌ ===");
+            Console.WriteLine("=== TEST THỬ INTERFACE INETWORKABLE VÀ NETWORK PRINTER ===");
 
-            //tạo dàn máy test với đồ công nghệ xịn sò
-            Computer pcKhung = new Computer("PC01", "Dàn PC Gaming RTX 5090 Ti", 2024, 85000000m, 64, "Core i9 14900KS", true);
-            Computer pcCo = new Computer("PC02", "Máy bàn văn phòng i3 cỏ", 2018, 7000000m, 8, "Core i3 8100", false);
+            //tạo máy tính và máy in có mạng
+            Computer pcGaming = new Computer("PC01", "Dàn PC Gaming RTX 5090 Ti", 2024, 85000000m, 64, "Core i9 14900KS", true);
+            NetworkPrinter inMang = new NetworkPrinter("PR_NET", "HP LaserJet Pro mạng LAN", 2022, 9500000m, "Laser", 35000, false);
+            Printer inThuong = new Printer("PR01", "Canon LBP2900 cắm USB", 2019, 4500000m, "Laser", 125000, false);
 
-            Printer inCanon = new Printer("PR01", "Canon LBP2900 quốc dân", 2019, 4500000m, "Laser", 125000, false);
-            Printer inMau = new Printer("PR02", "Epson L805 in màu studio", 2023, 6500000m, "Phun", 40000, true);
+            Console.WriteLine("\n--- Trạng thái ban đầu ---");
+            Console.WriteLine(pcGaming);
+            Console.WriteLine(inMang);
+            Console.WriteLine(inThuong);
 
-            Projector chieuD9 = new Projector("PJ01", "Máy chiếu hội trường D9", 2019, 20000000m, 3500, 3800);
 
-            //in ra xem thông tin từng con
-            Console.WriteLine("\n--- Thông tin thiết bị ---");
-            Console.WriteLine(pcKhung);
-            Console.WriteLine("-> Chi phí bảo trì 1 năm: " + pcKhung.CalculateAnnualMaintenanceCost().ToString("N0") + "đ");
+            Console.WriteLine("\n--- Test cắm mạng ---");
+            pcGaming.Connect("192.168.1.10");
+            inMang.Connect("192.168.1.55");
 
-            Console.WriteLine("\n" + pcCo);
-            Console.WriteLine("-> Chi phí bảo trì 1 năm (dùng >5 năm): " + pcCo.CalculateAnnualMaintenanceCost().ToString("N0") + "đ");
+            Console.WriteLine("Sau khi cắm dây mạng:");
+            Console.WriteLine(pcGaming);
+            Console.WriteLine(inMang);
 
-            Console.WriteLine("\n" + inCanon);
-            Console.WriteLine("-> Chi phí bảo trì 1 năm (in >100k trang): " + inCanon.CalculateAnnualMaintenanceCost().ToString("N0") + "đ");
-
-            Console.WriteLine("\n" + inMau);
-            Console.WriteLine("-> Chi phí bảo trì 1 năm (máy in màu): " + inMau.CalculateAnnualMaintenanceCost().ToString("N0") + "đ");
-
-            Console.WriteLine("\n" + chieuD9);
-            Console.WriteLine("-> Chi phí bảo trì 1 năm (bóng đèn >3000h): " + chieuD9.CalculateAnnualMaintenanceCost().ToString("N0") + "đ");
-
-            //test thử validate dữ liệu
-            Console.WriteLine("\n--- Test thử bắt lỗi nhập linh tinh ---");
+            Console.WriteLine("\n--- Test bắt lỗi mạng ---");
+            //thử cắm lại khi đang nối mạng
             try
             {
-                Computer pcLoi = new Computer("PC_ERR", "Máy du hành tương lai", 2099, 10000000m, 16, "M1", false);
+                pcGaming.Connect("192.168.1.99");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("bắt được lỗi năm: " + ex.Message);
+                Console.WriteLine("bắt được lỗi cắm đè IP: " + ex.Message);
+
+
             }
 
+            //thử nhập ip rỗng
             try
             {
-                Printer inGiaAm = new Printer("PR_ERR", "Máy in tặng kèm", 2022, -500000m, "Laser", 100, false);
+                inMang.Disconnect();
+                inMang.Connect("   ");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("bắt được lỗi giá mua: " + ex.Message);
+                Console.WriteLine("bắt được lỗi ip rỗng: " + ex.Message);
             }
+
+
+
+
+
+            //test rút mạng
+            Console.WriteLine("\n--- Test rút mạng ---");
+            pcGaming.Disconnect();
+            Console.WriteLine("Rút mạng PC xong -> Đang nối: " + pcGaming.IsConnected + ", IP: " + (pcGaming.IpAddress ?? "null"));
         }
     }
 }
